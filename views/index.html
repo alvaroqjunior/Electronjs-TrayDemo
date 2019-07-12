@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World App</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+    <script src="../libs/knockout.js"></script>
+    <script src="../libs/jquery.js"></script>
+    <script src="../libs/require.js" data-main="../viewmodels/index" defer="defer"></script>
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+
+    <p>Name: <input data-bind='textInput: Model.Descricao' /></p> 
+    <h2>Status Controller, <span data-bind='text: Model.Status'> </span>!</h2>  
+
+  </body>
+</html>
+
+

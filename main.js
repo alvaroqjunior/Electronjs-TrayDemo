@@ -2,12 +2,11 @@ const electron = require("electron");
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const Menu = electron.Menu
-//const {app, BrowserWindow} = require('electron')
+
 const path = require('path')
-const url = require('url')
 const Tray = electron.Tray
 
-const iconPath = path.join(__dirname, 'ytlogo.jpg')
+var mainWindow = null;
 let tray = null
 
 function createWindow() {
@@ -20,39 +19,27 @@ function createWindow() {
     }
   })
 
-  // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
+  mainWindow.loadFile('views/index.html');
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
-
-  // Emitted when the window is closed.
   mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
     mainWindow = null
   })
 }
 
 app.on('ready', function () {
-  tray = new Tray(iconPath)
+  tray = new Tray(path.join(__dirname, 'images/metris.png'))
 
   let template = [
     {
       label: 'Statistics',
-      click: function()
-      { 
-        createWindow()
-      }
+      click: function() {  createWindow()   }
     }
   ]
 
   const contextMenu = Menu.buildFromTemplate(template)
   tray.setContextMenu(contextMenu)
-  tray.setToolTip('Tray App')
+  tray.setToolTip('Metris X')
 });
-
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
