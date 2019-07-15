@@ -5,7 +5,11 @@ define(function (require) {
 
     //#region model
     var model = {
-        Descricao: ko.observable(''),
+        Device: ko.observable(''),
+        Description: ko.observable(''),
+        Name: ko.observable(''),
+        AppCount: ko.observable(0),
+        TaskCount: ko.observable(0),
         Status: ko.observable('')
     };
     //#endregion
@@ -21,7 +25,7 @@ define(function (require) {
     //#endregion
 
     function getStatus() {
-        $.support.cors = false;
+        $.support.cors = true;
 
         var Params = {};
         Params.type = 'GET';
@@ -29,15 +33,43 @@ define(function (require) {
         Params.dataType = 'json';
         Params.contentType = "application/json; charset=utf-8";
         Params.cache = false;
+        Params.crossDomain= true,
+        Params.headers = { 'Access-Control-Allow-Origin': '*', Accept: 'application/json'},
         Params.success = function (data) {
             model.Status(data);
         };
         return $.ajax(Params).fail(
-            function (_xhr, _textStatus, _err) {
-                model.Status('Error ao buscar status');
+            function (xhr, textStatus, thrownError) {
+                model.Status(xhr.responseText + "\n" + xhr.status + "\n" + thrownError);
             });
     }
 
+    function getControllerInfo() {
+        $.support.cors = true;
+
+        var Params = {};
+        Params.type = 'GET';
+        Params.url = 'http://localhost:9090/api/test/controllerinfo';
+        Params.dataType = 'json';
+        Params.contentType = "application/json; charset=utf-8";
+        Params.cache = false;
+        Params.crossDomain= true,
+        Params.headers = { 'Access-Control-Allow-Origin': '*', Accept: 'application/json'},
+        Params.success = function (item) {
+            var data = JSON.parse(item);
+            model.Device(data.Device);
+            model.Description(data.Description);
+            model.Name(data.Name);
+            model.AppCount(data.AppCount);
+            model.TaskCount(data.TaskCount);
+        };
+        return $.ajax(Params).fail(
+            function (xhr, textStatus, thrownError) {
+                //model.Status(xhr.responseText + "\n" + xhr.status + "\n" + thrownError);
+            });
+    }
+
+    getControllerInfo();
     getStatus();
 
     return indexView;

@@ -10,20 +10,26 @@ var mainWindow = null;
 let tray = null
 
 function createWindow() {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
+  if (mainWindow == null)
+  {
+    mainWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js')
+      }
+    })
 
-  mainWindow.loadFile('views/index.html');
+    mainWindow.loadFile('views/index.html');
+  }
+  else
+    mainWindow.show(); 
 
-  mainWindow.on('closed', function () {
-    mainWindow = null
-  })
+  mainWindow.on('close', function (event) {
+    mainWindow.hide();
+    event.preventDefault();
+    return false;
+  });
 }
 
 app.on('ready', function () {
@@ -32,11 +38,16 @@ app.on('ready', function () {
   let template = [
     {
       label: 'Statistics',
-      click: function() {  createWindow()   }
+      click: function () { createWindow() }
+    },
+    {
+      label: 'Quit',
+      click: function () { tray.destroy(); app.quit() }
     }
   ]
 
   const contextMenu = Menu.buildFromTemplate(template)
+
   tray.setContextMenu(contextMenu)
   tray.setToolTip('Metris X')
 });
@@ -44,10 +55,5 @@ app.on('ready', function () {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
-  }
-});
-
-app.on('activate', () => {
-  if (win === null) {
   }
 });

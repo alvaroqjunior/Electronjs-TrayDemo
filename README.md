@@ -1,3 +1,3 @@
-﻿# ElectronTray2Demo
+﻿# Electron-TrayDemo
 
 
