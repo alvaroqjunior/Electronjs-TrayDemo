@@ -16,13 +16,20 @@ define(function (require) {
 
     //#region Constructor
     var indexView = {
-        Model: model
+        Model: model,
+        Refresh: refresh
     };
     //#endregion
 
     //#region Actions
     ko.applyBindings(indexView);
     //#endregion
+
+    function refresh()
+    {
+        getControllerInfo();
+        getStatus();
+    }
 
     function getStatus() {
         $.support.cors = true;
